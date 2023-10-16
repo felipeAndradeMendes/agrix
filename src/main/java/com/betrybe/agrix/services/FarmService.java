@@ -80,4 +80,14 @@ public class FarmService {
     crop.setFarm(optionalFarm.get());
     return cropRepository.save(crop);
   }
+
+  public List<Crop> getAllCrops(Integer id) {
+    Optional<Farm> optionalFarm = farmRepository.findById(id);
+
+    if (optionalFarm.isEmpty()) {
+      throw new FarmNotFoundException();
+    }
+
+    return cropRepository.findAll();
+  }
 }
