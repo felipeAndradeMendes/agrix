@@ -1,7 +1,9 @@
 package com.betrybe.agrix.controller;
 
+import com.betrybe.agrix.controller.dto.CropDto;
 import com.betrybe.agrix.controller.dto.FarmDto;
 //import com.betrybe.agrix.controller.dto.ResponseDto;
+import com.betrybe.agrix.models.entities.Crop;
 import com.betrybe.agrix.models.entities.Farm;
 import com.betrybe.agrix.services.FarmService;
 import java.util.List;
@@ -66,5 +68,23 @@ public class FarmController {
   public ResponseEntity<Farm> getFarmById(@PathVariable Integer id) {
     Farm foundFarm = farmService.getFarmById(id);
     return ResponseEntity.ok(foundFarm);
+  }
+
+  /**
+   * CROPS.
+   */
+
+  @PostMapping("/{farmId}/crops")
+  public ResponseEntity<CropDto> createCrop(
+      @PathVariable Integer farmId,
+      @RequestBody Crop crop) {
+    Crop newCrop = farmService.createCrop(farmId, crop);
+    CropDto cropDto = new CropDto(
+        newCrop.getId(),
+        newCrop.getName(),
+        newCrop.getPlantedArea(),
+        newCrop.getFarm().getId());
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(cropDto);
   }
 }

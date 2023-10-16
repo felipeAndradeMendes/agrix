@@ -29,6 +29,9 @@ public class Farm {
   @JsonIgnore
   private List<Crop> crops;
 
+  /**
+   * Instantiates a new Farm.
+   */
   public Farm() {
   }
 
@@ -45,6 +48,14 @@ public class Farm {
     this.size = size;
   }
 
+  /**
+   * Instantiates a new Farm.
+   *
+   * @param id    the id
+   * @param name  the name
+   * @param size  the size
+   * @param crops the crops
+   */
   public Farm(Integer id, String name, Double size, List<Crop> crops) {
     this.id = id;
     this.name = name;
@@ -52,10 +63,20 @@ public class Farm {
     this.crops = crops;
   }
 
+  /**
+   * Gets crops.
+   *
+   * @return the crops
+   */
   public List<Crop> getCrops() {
     return crops;
   }
 
+  /**
+   * Sets crops.
+   *
+   * @param crops the crops
+   */
   public void setCrops(List<Crop> crops) {
     this.crops = crops;
   }
