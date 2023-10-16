@@ -22,6 +22,9 @@ public class Farm {
 
   private Double size;
 
+  public Farm() {
+  }
+
   /**
    * Instantiates a new Farm.
    *
