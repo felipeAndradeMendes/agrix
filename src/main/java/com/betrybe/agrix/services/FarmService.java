@@ -90,7 +90,7 @@ public class FarmService {
    * @param id the id
    * @return the all crops
    */
-  public List<Crop> getAllCrops(Integer id) {
+  public List<Crop> getAllCropsFromFarmId(Integer id) {
     Optional<Farm> optionalFarm = farmRepository.findById(id);
 
     if (optionalFarm.isEmpty()) {

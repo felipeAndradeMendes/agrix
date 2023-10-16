@@ -7,6 +7,7 @@ import com.betrybe.agrix.models.entities.Crop;
 import com.betrybe.agrix.models.entities.Farm;
 import com.betrybe.agrix.services.FarmService;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -95,8 +96,9 @@ public class FarmController {
    * @return the all crops
    */
   @GetMapping("/{farmId}/crops")
-  public ResponseEntity<List<CropDto>> getAllCrops(@PathVariable Integer farmId) {
-    List<CropDto> allCrops = farmService.getAllCrops(farmId).stream()
+  public ResponseEntity<List<CropDto>> getAllCropsFromFarmId(@PathVariable Integer farmId) {
+    List<CropDto> allCrops = farmService.getAllCropsFromFarmId(farmId).stream()
+        .filter(crop -> Objects.equals(crop.getFarm().getId(), farmId))
         .map(crop -> new CropDto(
             crop.getId(),
             crop.getName(),
