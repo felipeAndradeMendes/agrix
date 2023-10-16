@@ -85,7 +85,7 @@ public class FarmService {
   }
 
   /**
-   * Gets all crops.
+   * Gets all crops from farm id.
    *
    * @param id the id
    * @return the all crops
@@ -97,6 +97,10 @@ public class FarmService {
       throw new FarmNotFoundException();
     }
 
+    return cropRepository.findAll();
+  }
+
+  public List<Crop> getAllCrops() {
     return cropRepository.findAll();
   }
 }
