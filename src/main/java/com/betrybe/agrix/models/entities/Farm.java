@@ -1,10 +1,13 @@
 package com.betrybe.agrix.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.List;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 /**
@@ -22,6 +25,10 @@ public class Farm {
 
   private Double size;
 
+  @OneToMany(mappedBy = "farm")
+  @JsonIgnore
+  private List<Crop> crops;
+
   public Farm() {
   }
 
@@ -36,6 +43,13 @@ public class Farm {
     this.id = id;
     this.name = name;
     this.size = size;
+  }
+
+  public Farm(Integer id, String name, Double size, List<Crop> crops) {
+    this.id = id;
+    this.name = name;
+    this.size = size;
+    this.crops = crops;
   }
 
   /**
