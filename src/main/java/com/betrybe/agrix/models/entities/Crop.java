@@ -29,6 +29,9 @@ public class Crop {
   @JoinColumn(name = "farm_id")
   private Farm farm;
 
+  public Crop() {
+  }
+
   /**
    * Instantiates a new Crop.
    *
