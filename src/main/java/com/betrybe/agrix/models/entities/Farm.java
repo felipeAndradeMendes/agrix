@@ -52,6 +52,14 @@ public class Farm {
     this.crops = crops;
   }
 
+  public List<Crop> getCrops() {
+    return crops;
+  }
+
+  public void setCrops(List<Crop> crops) {
+    this.crops = crops;
+  }
+
   /**
    * Gets id.
    *
