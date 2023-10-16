@@ -6,11 +6,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+/**
+ * The type General controller advice.
+ */
 @ControllerAdvice
 public class GeneralControllerAdvice {
 
+  /**
+   * Handle farm not found exception response entity.
+   *
+   * @param exception the exception
+   * @return the response entity
+   */
   @ExceptionHandler(FarmNotFoundException.class)
-  public ResponseEntity<String> handleFarmNotFoundException (
+  public ResponseEntity<String> handleFarmNotFoundException(
       FarmNotFoundException exception
   ) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND)
