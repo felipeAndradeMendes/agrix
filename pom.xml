@@ -52,12 +52,6 @@
       <scope>runtime</scope>
     </dependency>
 
-
-    <!-- Adicione suas dependências aqui, mas não altere as que já estão configuradas -->
-
-
-
-
     <!-- Spring Boot -->
 
     <dependency>
