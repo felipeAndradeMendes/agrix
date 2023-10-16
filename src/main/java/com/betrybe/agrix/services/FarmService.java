@@ -68,8 +68,11 @@ public class FarmService {
 
   /**
    * CROPS.
+   *
+   * @param id   the id
+   * @param crop the crop
+   * @return the crop
    */
-
   public Crop createCrop(Integer id, Crop crop) {
     Optional<Farm> optionalFarm = farmRepository.findById(id);
 
@@ -81,6 +84,12 @@ public class FarmService {
     return cropRepository.save(crop);
   }
 
+  /**
+   * Gets all crops.
+   *
+   * @param id the id
+   * @return the all crops
+   */
   public List<Crop> getAllCrops(Integer id) {
     Optional<Farm> optionalFarm = farmRepository.findById(id);
 
