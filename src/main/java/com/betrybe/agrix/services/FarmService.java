@@ -2,6 +2,7 @@ package com.betrybe.agrix.services;
 
 import com.betrybe.agrix.exception.CropNotFoundException;
 import com.betrybe.agrix.exception.FarmNotFoundException;
+import com.betrybe.agrix.exception.FertilizerNotFoundException;
 import com.betrybe.agrix.models.entities.Crop;
 import com.betrybe.agrix.models.entities.Farm;
 import com.betrybe.agrix.models.entities.Fertilizer;
@@ -150,5 +151,10 @@ public class FarmService {
 
   public List<Fertilizer> findAllFertilizers() {
     return fertilizerRepository.findAll();
+  }
+
+  public Fertilizer getFertilizerById(Integer id) {
+    return fertilizerRepository.findById(id)
+        .orElseThrow(FertilizerNotFoundException::new);
   }
 }
