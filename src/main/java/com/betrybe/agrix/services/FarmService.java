@@ -147,4 +147,8 @@ public class FarmService {
   public Fertilizer createFertilizer(Fertilizer fertilizer) {
     return fertilizerRepository.save(fertilizer);
   }
+
+  public List<Fertilizer> findAllFertilizers() {
+    return fertilizerRepository.findAll();
+  }
 }
