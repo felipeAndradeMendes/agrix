@@ -144,7 +144,7 @@ public class FarmService {
    * FERTILIZERS.
    */
 
-  public Fertilizer insertFertilizer(Fertilizer fertilizer) {
+  public Fertilizer createFertilizer(Fertilizer fertilizer) {
     return fertilizerRepository.save(fertilizer);
   }
 }
