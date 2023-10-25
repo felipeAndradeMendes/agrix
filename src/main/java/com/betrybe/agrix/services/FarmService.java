@@ -6,6 +6,7 @@ import com.betrybe.agrix.models.entities.Crop;
 import com.betrybe.agrix.models.entities.Farm;
 import com.betrybe.agrix.models.repositories.CropRepository;
 import com.betrybe.agrix.models.repositories.FarmRepository;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,5 +120,16 @@ public class FarmService {
     }
 
     return optionalCrop.get();
+  }
+
+  /**
+   * Gets crop by harvest day.
+   *
+   * @param startDate the start date
+   * @param endDate   the end date
+   * @return the crop by harvest day
+   */
+  public List<Crop> getCropByHarvestDay(LocalDate startDate, LocalDate endDate) {
+    return cropRepository.findCropByHarvestDateBetween(startDate, endDate);
   }
 }
