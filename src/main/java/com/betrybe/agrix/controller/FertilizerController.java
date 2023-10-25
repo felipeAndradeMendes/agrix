@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,5 +68,25 @@ public class FertilizerController {
                     fertilizer.getComposition()
                 )).toList()
         );
+  }
+
+  /**
+   * Gets fertilizer by id.
+   *
+   * @param id the id
+   * @return the fertilizer by id
+   */
+  @GetMapping("/{id}")
+  public ResponseEntity<FertilizerDto> getFertilizerById(@PathVariable Integer id) {
+    Fertilizer fertilizer = farmService.getFertilizerById(id);
+
+    return ResponseEntity.ok(
+        new FertilizerDto(
+            fertilizer.getId(),
+            fertilizer.getName(),
+            fertilizer.getBrand(),
+            fertilizer.getComposition()
+        )
+    );
   }
 }

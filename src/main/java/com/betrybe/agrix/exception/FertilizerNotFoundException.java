@@ -1,6 +1,13 @@
 package com.betrybe.agrix.exception;
 
-public class FertilizerNotFoundException extends RuntimeException{
+/**
+ * The type Fertilizer not found exception.
+ */
+public class FertilizerNotFoundException extends RuntimeException {
+
+  /**
+   * Instantiates a new Fertilizer not found exception.
+   */
   public FertilizerNotFoundException() {
     super("Fertilizante não encontrado!");
   }
