@@ -39,6 +39,9 @@ public class Crop {
   @JoinColumn(name = "farm_id")
   private Farm farm;
 
+  /**
+   * The Fertilizers.
+   */
   @ManyToMany
   @JoinTable(
       name = "crop_fertilizer",
@@ -75,6 +78,24 @@ public class Crop {
     this.plantedDate = plantedDate;
     this.harvestDate = harvestDate;
     this.farm = farm;
+  }
+
+  /**
+   * Gets fertilizers.
+   *
+   * @return the fertilizers
+   */
+  public List<Fertilizer> getFertilizers() {
+    return fertilizers;
+  }
+
+  /**
+   * Sets fertilizers.
+   *
+   * @param fertilizers the fertilizers
+   */
+  public void setFertilizers(List<Fertilizer> fertilizers) {
+    this.fertilizers = fertilizers;
   }
 
   /**

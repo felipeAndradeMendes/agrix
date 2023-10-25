@@ -4,8 +4,10 @@ import com.betrybe.agrix.exception.CropNotFoundException;
 import com.betrybe.agrix.exception.FarmNotFoundException;
 import com.betrybe.agrix.models.entities.Crop;
 import com.betrybe.agrix.models.entities.Farm;
+import com.betrybe.agrix.models.entities.Fertilizer;
 import com.betrybe.agrix.models.repositories.CropRepository;
 import com.betrybe.agrix.models.repositories.FarmRepository;
+import com.betrybe.agrix.models.repositories.FertilizerRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -22,15 +24,20 @@ public class FarmService {
 
   private final CropRepository cropRepository;
 
+  private final FertilizerRepository fertilizerRepository;
+
   /**
    * Instantiates a new Farm service.
    *
    * @param farmRepository the farm repository
    */
   @Autowired
-  public FarmService(FarmRepository farmRepository, CropRepository cropRepository) {
+  public FarmService(FarmRepository farmRepository,
+      CropRepository cropRepository,
+      FertilizerRepository fertilizerRepository) {
     this.farmRepository = farmRepository;
     this.cropRepository = cropRepository;
+    this.fertilizerRepository = fertilizerRepository;
   }
 
   /**
@@ -131,5 +138,13 @@ public class FarmService {
    */
   public List<Crop> getCropByHarvestDay(LocalDate startDate, LocalDate endDate) {
     return cropRepository.findCropByHarvestDateBetween(startDate, endDate);
+  }
+
+  /**
+   * FERTILIZERS.
+   */
+
+  public Fertilizer insertFertilizer(Fertilizer fertilizer) {
+    return fertilizerRepository.save(fertilizer);
   }
 }
