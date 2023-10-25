@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 
 /**
  * The type Crop.
@@ -25,10 +26,19 @@ public class Crop {
   @Column(name = "planted_area")
   private Double plantedArea;
 
+  @Column(name = "planted_date")
+  private LocalDate plantedDate;
+
+  @Column(name = "harvest_date")
+  private LocalDate harvestDate;
+
   @ManyToOne
   @JoinColumn(name = "farm_id")
   private Farm farm;
 
+  /**
+   * Instantiates a new Crop.
+   */
   public Crop() {
   }
 
@@ -39,14 +49,58 @@ public class Crop {
    * @param name        the name
    * @param plantedArea the planted area
    * @param farm        the farm
+   * @param plantedDate the planted date
+   * @param harvestDate the harvest date
    */
-  public Crop(Integer id, String name, Double plantedArea, Farm farm) {
+  public Crop(Integer id,
+      String name,
+      Double plantedArea,
+      Farm farm,
+      LocalDate plantedDate,
+      LocalDate harvestDate) {
     this.id = id;
     this.name = name;
     this.plantedArea = plantedArea;
+    this.plantedDate = plantedDate;
+    this.harvestDate = harvestDate;
     this.farm = farm;
   }
 
+  /**
+   * Gets planted date.
+   *
+   * @return the planted date
+   */
+  public LocalDate getPlantedDate() {
+    return plantedDate;
+  }
+
+  /**
+   * Sets planted date.
+   *
+   * @param plantedDate the planted date
+   */
+  public void setPlantedDate(LocalDate plantedDate) {
+    this.plantedDate = plantedDate;
+  }
+
+  /**
+   * Gets harvest date.
+   *
+   * @return the harvest date
+   */
+  public LocalDate getHarvestDate() {
+    return harvestDate;
+  }
+
+  /**
+   * Sets harvest date.
+   *
+   * @param harvestDate the harvest date
+   */
+  public void setHarvestDate(LocalDate harvestDate) {
+    this.harvestDate = harvestDate;
+  }
 
   /**
    * Gets id.

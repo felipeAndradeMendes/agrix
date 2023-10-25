@@ -43,6 +43,8 @@ public class CropController {
             crop.getId(),
             crop.getName(),
             crop.getPlantedArea(),
+            crop.getPlantedDate(),
+            crop.getHarvestDate(),
             crop.getFarm().getId()
         ))
         .collect(Collectors.toList());
@@ -63,6 +65,8 @@ public class CropController {
         foundCrop.getId(),
         foundCrop.getName(),
         foundCrop.getPlantedArea(),
+        foundCrop.getPlantedDate(),
+        foundCrop.getHarvestDate(),
         foundCrop.getFarm().getId()
     );
     return ResponseEntity.ok(foundCropDto);
