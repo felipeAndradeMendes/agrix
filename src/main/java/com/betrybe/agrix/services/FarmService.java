@@ -142,6 +142,24 @@ public class FarmService {
   }
 
   /**
+   * Association crop and fertilizer crop.
+   *
+   * @param cropId       the crop id
+   * @param fertilizerId the fertilizer id
+   * @return the crop
+   */
+  public Crop associationCropAndFertilizer(Integer cropId, Integer fertilizerId) {
+    Crop crop = cropRepository.findById(cropId)
+        .orElseThrow(CropNotFoundException::new);
+
+    Fertilizer fertilizer = fertilizerRepository.findById(fertilizerId)
+        .orElseThrow(FertilizerNotFoundException::new);
+
+    crop.getFertilizers().add(fertilizer);
+    return cropRepository.save(crop);
+  }
+
+  /**
    * FERTILIZERS.
    */
 
@@ -157,4 +175,5 @@ public class FarmService {
     return fertilizerRepository.findById(id)
         .orElseThrow(FertilizerNotFoundException::new);
   }
+
 }
