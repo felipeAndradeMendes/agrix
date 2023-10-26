@@ -2,6 +2,7 @@ package com.betrybe.agrix.models.repositories;
 
 import com.betrybe.agrix.controller.dto.CropDto;
 import com.betrybe.agrix.models.entities.Crop;
+import com.betrybe.agrix.models.entities.Fertilizer;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,4 +35,11 @@ public interface CropRepository extends JpaRepository<Crop, Integer> {
    * Método de consulta derivado.
    */
   List<Crop> findCropByHarvestDateBetween(LocalDate start, LocalDate end);
+
+  //  /**
+  //   * Metodo para trazer do banco lista de fertilizantes de uma crop.
+  //   */
+  //  @Query("SELECT c.fertilizers FROM Crop c WHERE c.id = :cropId")
+  //  List<Fertilizer> findFertilizersByCropId(@Param("cropId") Integer cropId);
+
 }
