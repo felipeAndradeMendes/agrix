@@ -160,6 +160,19 @@ public class FarmService {
   }
 
   /**
+   * Gets fertilizer by crop id.
+   *
+   * @param cropId the crop id
+   * @return the fertilizer by crop id
+   */
+  public List<Fertilizer> getFertilizerByCropId(Integer cropId) {
+    Crop crop = cropRepository.findById(cropId)
+        .orElseThrow(CropNotFoundException::new);
+    //  return cropRepository.findFertilizersByCropId(cropId);
+    return crop.getFertilizers();
+  }
+
+  /**
    * FERTILIZERS.
    */
 
