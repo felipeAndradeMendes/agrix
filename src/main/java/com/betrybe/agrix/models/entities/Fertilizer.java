@@ -1,5 +1,6 @@
 package com.betrybe.agrix.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,6 +29,7 @@ public class Fertilizer {
    * The Crops.
    */
   @ManyToMany(mappedBy = "fertilizers")
+  @JsonIgnore
   List<Crop> crops;
 
   /**
