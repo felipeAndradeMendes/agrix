@@ -34,6 +34,21 @@ public class TokenService {
         .sign(algorithm);
   }
 
+  /**
+   * Validate token string.
+   *
+   * @param token the token
+   * @return the string
+   */
+  public String validateToken(String token) {
+    Algorithm algorithm = Algorithm.HMAC256(secret);
+    return JWT.require(algorithm)
+        .withIssuer("agrix")
+        .build()
+        .verify(token)
+        .getSubject();
+  }
+
   private Instant generateExpirationDate() {
     return LocalDateTime.now()
         .plusHours(6)
