@@ -29,6 +29,13 @@ public class Person {
   public Person() {
   }
 
+  /**
+   * Instantiates a new Person.
+   *
+   * @param id       the id
+   * @param username the username
+   * @param role     the role
+   */
   public Person(Long id, String username, Role role) {
     this.id = id;
     this.username = username;
