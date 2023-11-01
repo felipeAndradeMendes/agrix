@@ -1,7 +1,10 @@
 package com.betrybe.agrix.ebytr.staff.controller;
 
 import com.betrybe.agrix.ebytr.staff.controller.dto.AuthenticationDto;
+import com.betrybe.agrix.ebytr.staff.entity.Person;
 import com.betrybe.agrix.ebytr.staff.service.PersonService;
+import com.betrybe.agrix.ebytr.staff.service.TokenService;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,18 +21,19 @@ public class AuthenticationController {
 
   private final AuthenticationManager authenticationManager;
 
-  private final PersonService personService;
+  private final TokenService tokenService;
+
 
   @Autowired
   public AuthenticationController(AuthenticationManager authenticationManager,
-      PersonService personService) {
+      TokenService tokenService) {
     this.authenticationManager = authenticationManager;
-    this.personService = personService;
+    this.tokenService = tokenService;
   }
 
 
   @PostMapping("/login")
-  public ResponseEntity<String> login(@RequestBody AuthenticationDto authenticationDto) {
+  public ResponseEntity<Object> login(@RequestBody AuthenticationDto authenticationDto) {
 
     UsernamePasswordAuthenticationToken usernamePassword =
         new UsernamePasswordAuthenticationToken(
@@ -37,9 +41,13 @@ public class AuthenticationController {
             authenticationDto.password());
 
     Authentication auth = authenticationManager.authenticate(usernamePassword);
+    Person person = (Person) auth.getPrincipal();
 
-    String response = auth.getName();
+    String token = tokenService.generateToken(person);
 
-    return ResponseEntity.ok(response);
+    // Criar dto para padronizar a resposta do token.
+    Object responseToken = Map.of("token", token);
+
+    return ResponseEntity.ok(responseToken);
   }
 }
