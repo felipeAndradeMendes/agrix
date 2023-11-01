@@ -9,12 +9,21 @@ import java.time.ZoneOffset;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/**
+ * The type Token service.
+ */
 @Service
 public class TokenService {
 
   @Value("${api.security.token.secret}")
   private String secret;
 
+  /**
+   * Generate token string.
+   *
+   * @param person the person
+   * @return the string
+   */
   public String generateToken(Person person) {
     Algorithm algorithm = Algorithm.HMAC256(secret);
 
