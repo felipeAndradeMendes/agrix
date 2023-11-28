@@ -83,6 +83,8 @@ public class FarmController {
         newCrop.getId(),
         newCrop.getName(),
         newCrop.getPlantedArea(),
+        newCrop.getPlantedDate(),
+        newCrop.getHarvestDate(),
         newCrop.getFarm().getId());
 
     return ResponseEntity.status(HttpStatus.CREATED).body(cropDto);
@@ -102,6 +104,8 @@ public class FarmController {
             crop.getId(),
             crop.getName(),
             crop.getPlantedArea(),
+            crop.getPlantedDate(),
+            crop.getHarvestDate(),
             crop.getFarm().getId()
         ))
         .collect(Collectors.toList());

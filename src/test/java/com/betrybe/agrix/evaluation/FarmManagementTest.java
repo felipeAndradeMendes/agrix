@@ -1,24 +1,23 @@
 package com.betrybe.agrix.evaluation;
 
 import static com.betrybe.agrix.evaluation.util.TestHelpers.objectToJson;
-import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.betrybe.agrix.evaluation.mock.FarmFixtures;
 import com.betrybe.agrix.evaluation.mock.MockFarm;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.betrybe.agrix.evaluation.util.SimpleResultHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
-import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -31,12 +30,14 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@DisplayName("Req 01-03")
-@DirtiesContext
+@DisplayName("Req 01")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@Execution(ExecutionMode.CONCURRENT)
 class FarmManagementTest {
 
   MockMvc mockMvc;
 
+  @Autowired
   ObjectMapper jsonMapper = new ObjectMapper();
 
   @BeforeEach
@@ -46,11 +47,12 @@ class FarmManagementTest {
     this.mockMvc = MockMvcBuilders
         .webAppContextSetup(wac)
         .defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
+        .alwaysDo(new SimpleResultHandler())
         .build();
   }
 
   @Test
-  @DisplayName("1- Crie uma API para controle de fazendas com a rota POST /farms")
+  @DisplayName("1- Migre seu código da Fase A para este projeto (Fase B)")
   void testFarmCreation() throws Exception {
     MockFarm farm = new MockFarm(FarmFixtures.farm1);
 
@@ -76,65 +78,5 @@ class FarmManagementTest {
         .andReturn().getResponse().getContentAsString();
 
     return jsonMapper.readValue(responseContent, MockFarm.class);
-  }
-
-  @Test
-  @DisplayName("2- Crie a rota GET /farms")
-  void testGetAllFarms() throws Exception {
-    Set<MockFarm> farms = Set.of(FarmFixtures.farm1, FarmFixtures.farm2, FarmFixtures.farm3);
-    Set<MockFarm> expectedFarms = new HashSet<>();
-
-    for (MockFarm farm : farms) {
-      MockFarm savedFarm = performFarmCreation(farm);
-      expectedFarms.add(savedFarm);
-    }
-
-    String responseContent = mockMvc.perform(get("/farms").accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andReturn().getResponse().getContentAsString();
-
-    Set<MockFarm> returnedFarms = jsonMapper.readValue(responseContent,
-        new TypeReference<>() {
-        });
-
-    assertEquals(
-        expectedFarms,
-        returnedFarms
-    );
-  }
-
-  @Test
-  @DisplayName("3- Crie a rota GET /farms/{id}")
-  void testGetFarm() throws Exception {
-    testGetFarmSuccess();
-    testGetFarmNotFound();
-  }
-
-  void testGetFarmNotFound() throws Exception {
-    mockMvc.perform(get("/farms/9999")
-            .accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isNotFound())
-        .andExpect(content().string(containsString("Fazenda não encontrada!")));
-  }
-
-  void testGetFarmSuccess() throws Exception {
-    MockFarm farm = FarmFixtures.farm2;
-
-    MockFarm savedFarm = performFarmCreation(farm);
-
-    String farmUrl = "/farms/%s".formatted(savedFarm.get("id"));
-    String responseContent = mockMvc.perform(get(farmUrl)
-            .accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andReturn().getResponse().getContentAsString();
-
-    MockFarm responseFarm = jsonMapper.readValue(responseContent, MockFarm.class);
-
-    assertEquals(
-        savedFarm,
-        responseFarm
-    );
   }
 }

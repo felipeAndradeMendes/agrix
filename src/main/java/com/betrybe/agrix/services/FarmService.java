@@ -2,10 +2,14 @@ package com.betrybe.agrix.services;
 
 import com.betrybe.agrix.exception.CropNotFoundException;
 import com.betrybe.agrix.exception.FarmNotFoundException;
+import com.betrybe.agrix.exception.FertilizerNotFoundException;
 import com.betrybe.agrix.models.entities.Crop;
 import com.betrybe.agrix.models.entities.Farm;
+import com.betrybe.agrix.models.entities.Fertilizer;
 import com.betrybe.agrix.models.repositories.CropRepository;
 import com.betrybe.agrix.models.repositories.FarmRepository;
+import com.betrybe.agrix.models.repositories.FertilizerRepository;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +25,20 @@ public class FarmService {
 
   private final CropRepository cropRepository;
 
+  private final FertilizerRepository fertilizerRepository;
+
   /**
    * Instantiates a new Farm service.
    *
    * @param farmRepository the farm repository
    */
   @Autowired
-  public FarmService(FarmRepository farmRepository, CropRepository cropRepository) {
+  public FarmService(FarmRepository farmRepository,
+      CropRepository cropRepository,
+      FertilizerRepository fertilizerRepository) {
     this.farmRepository = farmRepository;
     this.cropRepository = cropRepository;
+    this.fertilizerRepository = fertilizerRepository;
   }
 
   /**
@@ -120,4 +129,64 @@ public class FarmService {
 
     return optionalCrop.get();
   }
+
+  /**
+   * Gets crop by harvest day.
+   *
+   * @param startDate the start date
+   * @param endDate   the end date
+   * @return the crop by harvest day
+   */
+  public List<Crop> getCropByHarvestDay(LocalDate startDate, LocalDate endDate) {
+    return cropRepository.findCropByHarvestDateBetween(startDate, endDate);
+  }
+
+  /**
+   * Association crop and fertilizer crop.
+   *
+   * @param cropId       the crop id
+   * @param fertilizerId the fertilizer id
+   * @return the crop
+   */
+  public Crop associationCropAndFertilizer(Integer cropId, Integer fertilizerId) {
+    Crop crop = cropRepository.findById(cropId)
+        .orElseThrow(CropNotFoundException::new);
+
+    Fertilizer fertilizer = fertilizerRepository.findById(fertilizerId)
+        .orElseThrow(FertilizerNotFoundException::new);
+
+    crop.getFertilizers().add(fertilizer);
+    return cropRepository.save(crop);
+  }
+
+  /**
+   * Gets fertilizer by crop id.
+   *
+   * @param cropId the crop id
+   * @return the fertilizer by crop id
+   */
+  public List<Fertilizer> getFertilizerByCropId(Integer cropId) {
+    Crop crop = cropRepository.findById(cropId)
+        .orElseThrow(CropNotFoundException::new);
+    //  return cropRepository.findFertilizersByCropId(cropId);
+    return crop.getFertilizers();
+  }
+
+  /**
+   * FERTILIZERS.
+   */
+
+  public Fertilizer createFertilizer(Fertilizer fertilizer) {
+    return fertilizerRepository.save(fertilizer);
+  }
+
+  public List<Fertilizer> findAllFertilizers() {
+    return fertilizerRepository.findAll();
+  }
+
+  public Fertilizer getFertilizerById(Integer id) {
+    return fertilizerRepository.findById(id)
+        .orElseThrow(FertilizerNotFoundException::new);
+  }
+
 }

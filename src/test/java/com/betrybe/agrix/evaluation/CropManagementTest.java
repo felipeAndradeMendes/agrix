@@ -14,6 +14,7 @@ import com.betrybe.agrix.evaluation.mock.CropFixtures;
 import com.betrybe.agrix.evaluation.mock.FarmFixtures;
 import com.betrybe.agrix.evaluation.mock.MockCrop;
 import com.betrybe.agrix.evaluation.mock.MockFarm;
+import com.betrybe.agrix.evaluation.util.SimpleResultHandler;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
@@ -24,6 +25,9 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -36,26 +40,32 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@DisplayName("Req 04-07")
-@DirtiesContext
-class CropManagementTest {
+@DisplayName("Req 03-06")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@Execution(ExecutionMode.CONCURRENT)
+public class CropManagementTest {
 
   MockMvc mockMvc;
 
-  ObjectMapper jsonMapper = new ObjectMapper();
+  @Autowired
+  WebApplicationContext wac;
+
+  @Autowired
+  ObjectMapper objectMapper;
 
   @BeforeEach
-  public void setup(WebApplicationContext wac) throws Exception {
+  public void setup() throws Exception {
     // We need this to make sure the response body is in UTF-8,
     // since we're testing raw strings
     this.mockMvc = MockMvcBuilders
         .webAppContextSetup(wac)
         .defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
+        .alwaysDo(new SimpleResultHandler())
         .build();
   }
 
   @Test
-  @DisplayName("4- Crie a rota POST /farms/{farmId}/crops")
+  @DisplayName("3- Ajuste (ou crie) a rota POST /farms/{farmId}/crops para utilizar datas")
   void testCropCreation() throws Exception {
     testCropCreationSuccess();
     testCropCreationFarmNotFound();
@@ -93,10 +103,10 @@ class CropManagementTest {
   }
 
   @Test
-  @DisplayName("5- Crie a rota GET /farms/{farmId}/crops")
+  @DisplayName("4- Ajuste (ou crie) a rota GET /farms/{farmId}/crops para utilizar datas")
   void testGetFarmCrops() throws Exception {
-    testGetFarmCropsEmpty();
     testGetFarmCropsSuccess();
+    testGetFarmCropsEmpty();
     testGetFarmCropsFarmNotFound();
   }
 
@@ -146,7 +156,7 @@ class CropManagementTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andReturn().getResponse().getContentAsString();
 
-    Set<MockCrop> returnedCrops = jsonMapper.readValue(responseContent,
+    Set<MockCrop> returnedCrops = objectMapper.readValue(responseContent,
         new TypeReference<>() {
         });
 
@@ -157,7 +167,7 @@ class CropManagementTest {
   }
 
   @Test
-  @DisplayName("6- Crie a rota GET /crops")
+  @DisplayName("5- Ajuste (ou crie) a rota GET /crops para utilizar datas")
   void testGetAllCrops() throws Exception {
     Map<MockFarm, List<MockCrop>> farmsCrops = Map.of(
         FarmFixtures.farm1, List.of(
@@ -188,7 +198,7 @@ class CropManagementTest {
         .andReturn().getResponse().getContentAsString();
 
     Set<MockCrop> returnedCrops = Set.copyOf(
-        jsonMapper.readValue(responseContent,
+        objectMapper.readValue(responseContent,
             new TypeReference<>() {
             })
     );
@@ -200,7 +210,7 @@ class CropManagementTest {
   }
 
   @Test
-  @DisplayName("7- Crie a rota GET /crops/{id}")
+  @DisplayName("6- Ajuste (ou crie) a rota GET /crops/{id} para utilizar datas")
   void testGetCrop() throws Exception {
     testGetCropSuccess();
     testGetCropNotFound();
@@ -218,7 +228,7 @@ class CropManagementTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andReturn().getResponse().getContentAsString();
 
-    MockCrop returnedCrop = jsonMapper.readValue(responseContent, MockCrop.class);
+    MockCrop returnedCrop = objectMapper.readValue(responseContent, MockCrop.class);
 
     assertEquals(
         crop,
@@ -244,7 +254,7 @@ class CropManagementTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andReturn().getResponse().getContentAsString();
 
-    return jsonMapper.readValue(responseContent, MockFarm.class);
+    return objectMapper.readValue(responseContent, MockFarm.class);
   }
 
   /**
@@ -261,6 +271,6 @@ class CropManagementTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andReturn().getResponse().getContentAsString();
 
-    return jsonMapper.readValue(responseContent, MockCrop.class);
+    return objectMapper.readValue(responseContent, MockCrop.class);
   }
 }
