@@ -2,18 +2,23 @@ package com.betrybe.agrix.ebytr.staff.entity;
 
 
 import com.betrybe.agrix.ebytr.staff.security.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Class representing a person.
  */
 @Entity
-public class Person {
+public class Person implements UserDetails, GrantedAuthority {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +34,19 @@ public class Person {
   public Person() {
   }
 
+  /**
+   * Instantiates a new Person.
+   *
+   * @param id       the id
+   * @param username the username
+   * @param role     the role
+   */
+  public Person(Long id, String username, Role role) {
+    this.id = id;
+    this.username = username;
+    this.role = role;
+  }
+
   public Long getId() {
     return id;
   }
@@ -37,14 +55,16 @@ public class Person {
     this.id = id;
   }
 
-  public String getUsername() {
-    return username;
-  }
-
   public void setUsername(String username) {
     this.username = username;
   }
 
+  @Override
+  public String getUsername() {
+    return username;
+  }
+
+  @Override
   public String getPassword() {
     return password;
   }
@@ -73,6 +93,38 @@ public class Person {
     return Objects.equals(id, person.id) && Objects.equals(username,
         person.username) && Objects.equals(password, person.password)
         && Objects.equals(role, person.role);
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
+
+  @JsonIgnore
+  @Override
+  public Collection<Person> getAuthorities() {
+    return List.of(this);
+  }
+
+  @JsonIgnore
+  @Override
+  public String getAuthority() {
+    return this.getRole().name();
   }
 }
 
